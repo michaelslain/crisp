@@ -12,6 +12,7 @@ gameInit();
 
 const frame = canvas.getContext('2d');
 const gameObjects = [];
+const objectsWithColliders = [];
 
 // Variables that have to do with time
 const Time = {
@@ -29,6 +30,7 @@ function gameLoop(timeStamp) {
 
 	clearCanvas();
 	handleFrameRateDisplay();
+	checkCollision();
 
 	gameObjects.forEach((gameObject) => {
 		gameObject.Update();
@@ -49,6 +51,36 @@ function handleFrameRateDisplay() {
 
 	Time.frameRate = Math.round(1000 / deltaTime);
 	frameRateDisplay.innerHTML = frameRate;
+}
+
+// Checks collision
+function checkCollision() {
+	for (let i = 0; i < objectsWithColliders.length; i++) {
+		const obj1 = objectsWithColliders[i];
+
+		for (let j = i + 1; j < objectsWithColliders.length; j++) {
+			const obj2 = objectsWithColliders[j];
+
+			if (isColliding(obj1, obj2)) {
+				obj1.BoxCollider.isTrigger();
+				obj2.BoxCollider.isTrigger();
+			}
+		}
+	}
+
+	function isColliding(obj1, obj2) {
+		const { x, y, width, height } = obj1.Transform;
+		const { x: x2, y: y2, width: width2, height: height2 } = obj2.Transform;
+
+		if (
+			y2 + height2 >= y &&
+			y + height >= y2 &&
+			x2 <= x + width &&
+			x <= x2 + width2
+		)
+			return true;
+		else return false;
+	}
 }
 
 // Object contains engine commands
@@ -145,6 +177,9 @@ class GameObject {
 			case 'RigidBody':
 				addRigidBody();
 				break;
+			case 'BoxCollider':
+				addBoxCollider();
+				break;
 		}
 
 		function addRenderer() {
@@ -171,6 +206,11 @@ class GameObject {
 
 		function addRigidBody() {
 			self.RigidBody = { velocityX: 0, velocityY: 0, gravityX: 0, gravityY: 0 };
+		}
+
+		function addBoxCollider() {
+			objectsWithColliders.push(self);
+			self.BoxCollider = { collision: false, isTrigger: () => {} };
 		}
 
 		return this;

@@ -1,4 +1,4 @@
-for (let i = 0; i < 1000; i++) {
+for (let i = 0; i < 100; i++) {
 	function random(min, max) {
 		return Math.floor(Math.random() * max + min);
 	}
@@ -18,10 +18,16 @@ for (let i = 0; i < 1000; i++) {
 			sprite: Meshes.custom,
 			path: 'images/funeticlogo.png',
 		})
-		.AddComponent('RigidBody');
+		.AddComponent('RigidBody')
+		.AddComponent('BoxCollider');
 
 	square.RigidBody.velocityX = decimalRandom(-1, 2);
 	square.RigidBody.velocityY = decimalRandom(-1, 2);
+
+	square.BoxCollider.isTrigger = () => {
+		square.Transform.height = square.Transform.height - 10;
+		square.Transform.width = square.Transform.width - 10;
+	};
 
 	gameObjects.push(square);
 }
