@@ -9,13 +9,25 @@
 				border: 0;
 			}
 
+			body {
+				overflow: hidden;
+			}
+
 			#game {
 				width: 100vw;
 				height: 100vh;
 			}
+
+			#frame-rate {
+				font-size: 30px;
+				position: absolute;
+				right: 10px;
+				color: grey;
+			}
 		</style>
 	</head>
 	<body>
+		<h2 id="frame-rate"></h2>
 		<canvas id="game"></canvas>
 		<script src="engine.js"></script>
 		<script src="test.js"></script>

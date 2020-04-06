@@ -1,37 +1,29 @@
-// Initializing Player
-const player = new GameObject();
+for (let i = 0; i < 1000; i++) {
+	function random(min, max) {
+		return Math.floor(Math.random() * max + min);
+	}
 
-// Adding shape to player
-player.AddComponent('Renderer', { mesh: Meshes.square });
+	function decimalRandom(min, max) {
+		return Math.random() * max + min;
+	}
 
-player.Components.Transform.width = 100;
-player.Components.Transform.height = 100;
+	const square = new GameObject();
+	square.Transform.width = 100;
+	square.Transform.height = 100;
+	square.Transform.x = random(0, canvas.width);
+	square.Transform.y = random(0, canvas.height);
 
-// Custom player controller
-window.addEventListener('keydown', e => {
-	const speed = 10;
+	square
+		.AddComponent('Renderer', {
+			sprite: Meshes.custom,
+			path: 'images/funeticlogo.png',
+		})
+		.AddComponent('RigidBody');
 
-	// W key
-	if (e.keyCode === 87) player.Components.Transform.y -= speed;
+	square.RigidBody.velocityX = decimalRandom(-1, 2);
+	square.RigidBody.velocityY = decimalRandom(-1, 2);
 
-	// A key
-	if (e.keyCode === 65) player.Components.Transform.x -= speed;
-
-	// S key
-	if (e.keyCode === 83) player.Components.Transform.y += speed;
-
-	// D key
-	if (e.keyCode === 68) player.Components.Transform.x += speed;
-});
-
-const enemy = new GameObject();
-enemy.AddComponent('Renderer', { mesh: Meshes.square });
-enemy.Components.Transform.width = 50;
-enemy.Components.Transform.height = 50;
-enemy.Components.Transform.x = 500;
-enemy.Components.Transform.y = 200;
-
-gameObjects.push(player);
-gameObjects.push(enemy);
+	gameObjects.push(square);
+}
 
 Engine.renderGame();
